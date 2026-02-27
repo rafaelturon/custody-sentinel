@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Sentinel - Heir Recovery Protocol</title>
+    <style>
+        :root {
+            --bg-dark: #0A0E14;
+            --card-bg: #111827;
+            --primary-blue: #5C6BC0;
+            --accent-green: #00C853;
+            --warning-orange: #F59E0B;
+            --text-main: #F8FAFC;
+            --text-dim: #94A3B8;
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', -apple-system, sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .checklist-container {
+            width: 100%;
+            max-width: 800px;
+            background: linear-gradient(145deg, #111827 0%, #0A0E14 100%);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo {
+            font-weight: 800;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .policy-tag {
+            background: rgba(0, 200, 83, 0.1);
+            color: var(--accent-green);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--accent-green);
+        }
+
+        /* Status Bar */
+        .status-section {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .status-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-dim);
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .progress-container {
+            height: 12px;
+            background: #1F2937;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 75%; /* Example Progress */
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-green));
+        }
+
+        /* Steps */
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 24px;
+            padding: 16px;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        .step:hover {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            background: var(--primary-blue);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .step-content h3 {
+            margin: 0 0 4px 0;
+            font-size: 16px;
+            color: var(--text-main);
+        }
+
+        .step-content p {
+            margin: 0;
+            font-size: 13px;
+            color: var(--text-dim);
+            line-height: 1.4;
+        }
+
+        .action-hint {
+            color: var(--accent-green);
+            font-size: 11px;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin-top: 8px;
+            display: block;
+        }
+
+        /* Footer */
+        .footer-warning {
+            margin-top: 40px;
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid var(--warning-orange);
+            color: var(--warning-orange);
+            padding: 15px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .footer-meta {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-dim);
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="checklist-container">
+    <div class="header">
+        <div class="brand-logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="var(--primary-blue)"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>
+            AI SENTINEL <span style="font-size: 10px; color: var(--text-dim);">V0.1-MVP</span>
+        </div>
+        <div class="policy-tag">POLICY #1025: INHERITANCE RECOVERY</div>
+    </div>
+
+    <div class="status-section">
+        <div class="status-label">
+            <span>Primary Key Inactivity</span>
+            <span>Est. 12,400 Blocks Remaining</span>
+        </div>
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+            <h3>Verify the Timelock</h3>
+            <p>Confirm the 1-year (52,560 blocks) inactivity period has fully elapsed. The heir key will remain locked until this mathematical condition is met.</p>
+            <span class="action-hint">→ CHECK BLOCK HEIGHT & TIMELOCK STATUS</span>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+            <h3>Broadcast Trustee Handshake</h3>
+            <p>Use the AI Sentinel App to initiate a connection with the Trustee key. This request is broadcast securely via Nostr relays.</p>
+            <span class="action-hint">→ EXECUTE 'INITIATE RECOVERY HANDSHAKE'</span>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+            <h3>Receive Trustee Signature</h3>
+            <p>The Trustee (Lawyer) verifies the legal conditions and provides an asynchronous cryptographic signature via Nostr.</p>
+            <span class="action-hint">→ WAIT FOR TRUSTEE SIGNATURE DELIVERY</span>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-content">
+            <h3>Final Transaction Broadcast</h3>
+            <p>With both signatures confirmed and the timelock expired, broadcast the final recovery transaction to your successor wallet.</p>
+            <span class="action-hint">→ BROADCAST RECOVERY TRANSACTION</span>
+        </div>
+    </div>
+
+    <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-content">
+            <h3>Download Audit Trail</h3>
+            <p>Secure your completed audit trail with unique Nostr event ID logs for your legal and tax records.</p>
+            <span class="action-hint">→ DOWNLOAD POLICY #1025 FINAL AUDIT</span>
+        </div>
+    </div>
+
+    <div class="footer-warning">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        WARNING: THIS PROCESS IS NON-REVERSIBLE. VERIFY ALL DESTINATION ADDRESSES.
+    </div>
+
+    <div class="footer-meta">
+        Beckham Advisor Support Contact • Nostr Protocol Orchestrated
+    </div>
+</div>
+
+</body>
+</html>
