@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import './App.css';
+import { jsPDF } from 'jspdf';
 import {
   Users,
   Plus,
@@ -162,6 +163,170 @@ function AppInner() {
       setAgentOrchestration('verified');
       setTimeout(() => setAgentOrchestration('live'), 3000);
     }, 2000);
+  };
+
+  // ─── PDF Generation ───
+  const generatePolicyPDF = (policyNum) => {
+    const doc = new jsPDF();
+    const id = 1024 + policyNum;
+    const now = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    const pk = nostr?.keypair?.pk || 'N/A';
+
+    // Header bar
+    doc.setFillColor(30, 41, 59); // slate-800
+    doc.rect(0, 0, 210, 38, 'F');
+    doc.setFillColor(79, 70, 229); // indigo-600
+    doc.rect(0, 38, 210, 1.5, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AI SENTINEL', 20, 18);
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(148, 163, 184); // slate-400
+    doc.text('Institutional Custody Platform  |  V0.1-MVP-BETA', 20, 27);
+    doc.text(`Generated: ${now}`, 20, 33);
+
+    // Title
+    let y = 55;
+    doc.setTextColor(15, 23, 42); // slate-900
+    doc.setFontSize(16);
+    doc.setFont('helvetica', 'bold');
+    doc.text(`Institutional Custody Policy #${id}`, 20, y);
+
+    // Status badge
+    doc.setFillColor(16, 185, 129); // emerald-500
+    doc.roundedRect(20, y + 6, 35, 7, 1, 1, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(7);
+    doc.text('SENTINEL VERIFIED', 22.5, y + 11);
+
+    // Section: Policy Summary
+    y += 25;
+    doc.setDrawColor(226, 232, 240); // slate-200
+    doc.line(20, y, 190, y);
+    y += 10;
+    doc.setTextColor(71, 85, 105); // slate-500
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text('POLICY SUMMARY', 20, y);
+
+    y += 8;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(30, 41, 59);
+
+    const rows = [
+      ['Policy ID', `#${id}`],
+      ['Classification', 'Bitcoin Inheritance & Custody — Institutional Grade'],
+      ['Compliance Framework', 'MiCA (Markets in Crypto-Assets Regulation)'],
+      ['Jurisdiction', 'European Union — Spain'],
+      ['Risk Profile', policyNum === 1 ? 'Moderate' : policyNum === 2 ? 'Conservative' : 'Aggressive'],
+      ['Custody Logic', 'Self-Custody (Hardware Wallet)'],
+      ['Advisor Nostr PK', pk.slice(0, 32) + '...'],
+    ];
+
+    rows.forEach(([label, value]) => {
+      doc.setFont('helvetica', 'bold');
+      doc.setTextColor(100, 116, 139);
+      doc.setFontSize(8);
+      doc.text(label, 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(30, 41, 59);
+      doc.setFontSize(10);
+      doc.text(value, 75, y);
+      y += 8;
+    });
+
+    // Section: Vault Architecture
+    y += 6;
+    doc.setDrawColor(226, 232, 240);
+    doc.line(20, y, 190, y);
+    y += 10;
+    doc.setTextColor(71, 85, 105);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text('VAULT ARCHITECTURE', 20, y);
+
+    y += 10;
+    doc.setFontSize(9);
+    doc.setTextColor(30, 41, 59);
+    doc.setFont('helvetica', 'normal');
+
+    const vaultLines = [
+      'Spending Policy:  2-of-3 Multi-signature (Miniscript)',
+      'Key 1 (Primary):  Client hardware wallet — full control',
+      'Key 2 (Heir):     Specified successor — timelocked',
+      'Key 3 (Trustee):  Lawyer / recovery signer — async via Nostr (NIP-46)',
+      '',
+      'Recovery Timelock: 52,560 blocks (~1 year)',
+      'Notification:      NIP-59 Gift-Wrapped PSBT delivery',
+    ];
+
+    vaultLines.forEach((line) => {
+      if (line === '') { y += 3; return; }
+      doc.text(line, 20, y);
+      y += 6;
+    });
+
+    // Descriptor box
+    y += 6;
+    doc.setFillColor(241, 245, 249); // slate-100
+    doc.roundedRect(18, y - 2, 174, 18, 2, 2, 'F');
+    doc.setFontSize(6.5);
+    doc.setFont('courier', 'normal');
+    doc.setTextColor(16, 185, 129);
+    const desc = `wsh(thresh(2,pk([0f0569ed/84'/1'/0']tpub.../0/*),pk([d2f.../0/*),and_v(v:pk(TRUSTEE_PK),after(52560))))`;
+    doc.text(desc, 22, y + 5);
+    doc.setFontSize(6);
+    doc.setTextColor(148, 163, 184);
+    doc.text('Output Descriptor (Miniscript)', 22, y + 12);
+
+    // Section: AI Swarm Verification
+    y += 28;
+    doc.setDrawColor(226, 232, 240);
+    doc.line(20, y, 190, y);
+    y += 10;
+    doc.setTextColor(71, 85, 105);
+    doc.setFontSize(8);
+    doc.setFont('helvetica', 'bold');
+    doc.text('AI SENTINEL SWARM VERIFICATION', 20, y);
+
+    y += 8;
+    doc.setFontSize(9);
+    doc.setFont('helvetica', 'normal');
+    doc.setTextColor(30, 41, 59);
+    const agents = [
+      ['Manager Agent', 'Workflow decomposition via A2A protocol', 'PASS'],
+      ['Market Analyst', 'Mempool density & liquidity scan', 'PASS'],
+      ['Compliance Agent', 'MiCA Recital 83 non-custodality validation', 'PASS'],
+      ['Sentinel (Rust)', 'Deterministic miniscript verification', 'PASS'],
+    ];
+
+    agents.forEach(([agent, desc, status]) => {
+      doc.setFont('helvetica', 'bold');
+      doc.text(agent, 20, y);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 116, 139);
+      doc.text(desc, 62, y);
+      doc.setTextColor(16, 185, 129);
+      doc.setFont('helvetica', 'bold');
+      doc.text(status, 175, y);
+      doc.setTextColor(30, 41, 59);
+      doc.setFont('helvetica', 'normal');
+      y += 7;
+    });
+
+    // Footer
+    doc.setDrawColor(226, 232, 240);
+    doc.line(20, 270, 190, 270);
+    doc.setFontSize(7);
+    doc.setTextColor(148, 163, 184);
+    doc.text('AI Sentinel V0.1-MVP-BETA  |  This document was generated programmatically and does not constitute legal advice.', 20, 277);
+    doc.text(`Policy #${id}  |  Page 1 of 1`, 165, 277);
+
+    doc.save(`custody-policy-${id}.pdf`);
   };
 
   // Filtered clients
@@ -1023,7 +1188,7 @@ function AppInner() {
       <main className="flex-1 overflow-y-auto">
         <div className="max-w-6xl mx-auto pb-20">
           {finalizationState.active ? (
-            renderFinalizationPage()
+            renderVaultConfig()
           ) : (
             <>
               {activeTab === 'dashboard' && renderDashboard()}
@@ -1045,7 +1210,9 @@ function AppInner() {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <button className="px-4 py-2 bg-slate-800 text-xs font-bold rounded-lg hover:bg-slate-700 text-white transition-colors shadow-sm">
+                        <button
+                          onClick={() => generatePolicyPDF(i)}
+                          className="px-4 py-2 bg-slate-800 text-xs font-bold rounded-lg hover:bg-slate-700 text-white transition-colors shadow-sm">
                           Download PDF
                         </button>
                         <button
